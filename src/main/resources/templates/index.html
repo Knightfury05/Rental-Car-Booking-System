@@ -2,323 +2,342 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JAM Rental Cars</title>
+    <title>JAM Car Rentals</title>
     <style>
-        body {
-          margin: 0;
-          font-family: 'Poppins', sans-serif;
-          background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/bg1.jpg') no-repeat center center/cover;
-          background-attachment: fixed;
-          color: #fff;
-          overflow-x: hidden;
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background: url('/images/bg1.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            scroll-behavior: smooth;
         }
 
-        header {
-          background: rgba(0, 0, 0, 0.7);
-          box-shadow: 0 2px 10px rgba(255, 204, 0, 0.3);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 15px 60px;
-          position: fixed;
-          top: 0;
-          width: 100%;
-          z-index: 1000;
-          backdrop-filter: blur(6px);
+        /* Transparent overlay for scrolling effect */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: -1;
         }
 
-        header img {
-          height: 55px;
-          border-radius: 10px;
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 25px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        nav ul {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          display: flex;
-          gap: 25px;
-          align-items: center;
+        .header img {
+            height: 55px;
         }
 
-        nav ul li a {
-          color: white;
-          text-decoration: none;
-          font-weight: 500;
-          font-size: 17px;
-          transition: color 0.3s, transform 0.2s;
+        .header .nav-buttons button,
+        .header .nav-buttons form {
+            margin-left: 15px;
         }
 
-        nav ul li a:hover {
-          color: #ffcc00;
-          transform: scale(1.1);
+        .header .nav-buttons button {
+            padding: 8px 18px;
+            border: none;
+            background-color: #e63946;
+            color: white;
+            cursor: pointer;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
 
+        .header .nav-buttons button:hover {
+            background-color: #f1faee;
+            color: #e63946;
+        }
+
+        /* Centered hero section */
         .hero {
-          text-align: center;
-          margin-top: 140px;
-          padding: 120px 20px;
-          background: rgba(0, 0, 0, 0.45);
-          border-radius: 20px;
-          width: 75%;
-          margin-left: auto;
-          margin-right: auto;
+            text-align: center;
+            padding: 180px 20px 100px;
         }
 
         .hero h1 {
-          font-size: 44px;
-          margin-bottom: 5px;
-          letter-spacing: 2px;
-          color: #ffcc00;
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
         }
 
         .hero h2 {
-          font-size: 20px;
-          font-weight: 300;
-          margin-bottom: 30px;
-          color: #eee;
+            font-size: 1.8em;
+            color: #f1faee;
+            margin-bottom: 25px;
         }
 
-        .hero .buttons {
-          display: flex;
-          justify-content: center;
-          gap: 25px;
+        .book-btn {
+            background-color: #e63946;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            cursor: pointer;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1.1em;
+            margin: 10px;
+            transition: all 0.3s;
         }
 
-        .hero button {
-          padding: 14px 32px;
-          border: none;
-          border-radius: 30px;
-          background-color: #ffcc00;
-          color: black;
-          font-weight: bold;
-          font-size: 16px;
-          cursor: pointer;
-          transition: transform 0.3s, background 0.3s;
+        .book-btn:hover {
+            background-color: white;
+            color: #e63946;
+            transform: scale(1.1);
         }
 
-        .hero button:hover {
-          transform: translateY(-3px);
-          background: #ffdb4d;
+        /* User Reviews Section */
+        .user-reviews-section {
+            padding: 60px 20px;
+            text-align: center;
         }
 
-        section {
-          background: rgba(0, 0, 0, 0.55);
-          padding: 60px 20px;
-          margin-top: 80px;
-          border-radius: 15px;
-          width: 85%;
-          margin-left: auto;
-          margin-right: auto;
+        .user-reviews-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            color: #fff;
         }
 
-        .reviews {
-          display: flex;
-          overflow: hidden;
-          gap: 30px;
-          animation: scrollReviews 20s linear infinite;
+        .reviews-carousel {
+            overflow: hidden;
+            width: 100%;
         }
 
-        .review {
-          background: rgba(255, 255, 255, 0.1);
-          padding: 25px;
-          border-radius: 12px;
-          min-width: 300px;
-          flex: 0 0 auto;
-          color: white;
+        .reviews-track {
+            display: flex;
+            gap: 20px;
+            animation: scrollReviews 45s linear infinite;
         }
 
-        .review h3 {
-          margin: 10px 0 5px;
-          color: #ffcc00;
+        .review-card {
+            flex: 0 0 300px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+            transition: transform 0.3s;
         }
 
-        .stars {
-          color: #ffcc00;
-          font-size: 20px;
+        .review-card:hover {
+            transform: scale(1.05);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid white;
+        }
+
+        .rating {
+            color: gold;
         }
 
         @keyframes scrollReviews {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
+        /* Popular Cars */
         .popular-cars {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 25px;
-          margin-top: 50px;
+            padding: 60px 20px;
+            text-align: center;
         }
 
-        .car-card {
-          background: rgba(255, 255, 255, 0.08);
-          border-radius: 15px;
-          overflow: hidden;
-          text-align: center;
-          padding-bottom: 10px;
+        .popular-cars h2 {
+            font-size: 2.3em;
+            color: #fff;
+            margin-bottom: 40px;
         }
 
-        .car-card img {
-          width: 100%;
-          height: 160px;
-          object-fit: cover;
+        .car-gallery {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
         }
 
-        .car-card p {
-          margin: 10px 0;
-          font-weight: bold;
-          color: #ffcc00;
+        .car-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            width: 250px;
+            color: #fff;
+            backdrop-filter: blur(3px);
         }
 
-        footer {
-          background: rgba(0, 0, 0, 0.85);
-          padding: 40px 60px;
-          color: white;
-          text-align: center;
-          margin-top: 60px;
-          border-top: 2px solid #ffcc00;
+        .car-item img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
         }
 
-        footer .columns {
-          display: flex;
-          justify-content: space-around;
-          flex-wrap: wrap;
-          margin-bottom: 20px;
+        .car-item p {
+            padding: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
         }
 
-        footer .column h3 {
-          color: #ffcc00;
-          margin-bottom: 15px;
+        /* Minimal Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.6);
+            color: #ccc;
+            padding: 20px;
+            text-align: center;
+            margin-top: 60px;
         }
 
-        footer a {
-          color: #fff;
-          text-decoration: none;
-          display: block;
-          margin-bottom: 5px;
+        .footer p {
+            margin: 8px 0;
         }
 
-        footer a:hover {
-          color: #ffcc00;
+        .footer a {
+            color: #f1faee;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #e63946;
+        }
+
+        /* Back to Top */
+        .back-to-top-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        #back-to-top {
+            background-color: #e63946;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #back-to-top:hover {
+            background-color: white;
+            color: #e63946;
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
 
-<header>
-    <img src="/images/logo.jpg" alt="Logo">
-    <nav>
-        <ul>
-            <li><a th:href="@{/cars}">View Cars</a></li>
-            <li><a th:href="@{/myBookings}">My Bookings</a></li>
-            <li><a th:href="@{/contact}">Contact Us</a></li>
-            <li><a th:href="@{/logout}">Logout</a></li>
-        </ul>
-    </nav>
-</header>
+<!-- Header -->
+<div class="header">
+    <img src="/images/logo.png" alt="Logo">
 
-<div class="hero">
-    <h1>JAM Rental Cars</h1>
-    <h2>Find your dreams with us</h2>
-    <div class="buttons">
-        <a th:href="@{/bookCar}"><button>Book Now</button></a>
-        <a th:href="@{/cars}"><button>View Cars</button></a>
+    <div class="nav-buttons">
+        <button onclick="window.location.href='/contact'">Contact</button>
+        <button onclick="window.location.href='/register'">Register</button>
+        <button onclick="window.location.href='/myBookings'">My Bookings</button>
+
+        <form action="/logout" method="post" style="display:inline;">
+            <button type="submit">Logout</button>
+        </form>
     </div>
 </div>
 
-<section>
-    <h2 style="text-align:center;">Customer Reviews</h2>
-    <div class="reviews">
-        <div class="review">
-            <p>"Great service and clean cars! Highly recommend."</p>
-            <h3>- Rahul</h3>
-            <div class="stars">★★★★★</div>
-        </div>
-        <div class="review">
-            <p>"Smooth booking process and timely delivery."</p>
-            <h3>- Priya</h3>
-            <div class="stars">★★★★☆</div>
-        </div>
-        <div class="review">
-            <p>"Affordable and professional! Will rent again."</p>
-            <h3>- Kishore</h3>
-            <div class="stars">★★★★★</div>
-        </div>
-        <div class="review">
-            <p>"Car was in excellent condition, great experience."</p>
-            <h3>- Sneha</h3>
-            <div class="stars">★★★★★</div>
-        </div>
-        <!-- Duplicate for continuous scroll -->
-        <div class="review">
-            <p>"Great service and clean cars! Highly recommend."</p>
-            <h3>- Rahul</h3>
-            <div class="stars">★★★★★</div>
-        </div>
-        <div class="review">
-            <p>"Smooth booking process and timely delivery."</p>
-            <h3>- Priya</h3>
-            <div class="stars">★★★★☆</div>
-        </div>
-        <div class="review">
-            <p>"Affordable and professional! Will rent again."</p>
-            <h3>- Kishore</h3>
-            <div class="stars">★★★★★</div>
-        </div>
-        <div class="review">
-            <p>"Car was in excellent condition, great experience."</p>
-            <h3>- Sneha</h3>
-            <div class="stars">★★★★★</div>
+<!-- Hero Section -->
+<section class="hero">
+    <h1>JAM Rental Cars</h1>
+    <h2>Find Your Dream With Us</h2>
+    <a th:href="@{/SelectionCar}" class="book-btn">Book Now</a>
+    <a th:href="@{/cars}" class="book-btn">View Cars</a>
+</section>
+
+<!-- User Reviews Section -->
+<section class="user-reviews-section">
+    <h2>What Our Customers Say</h2>
+    <div class="reviews-carousel">
+        <div class="reviews-track">
+            <div class="review-card">
+                <div class="user-info"><img src="https://i.pravatar.cc/50?img=1" class="avatar"><p>Alice Johnson</p></div>
+                <p>"Amazing service! Perfect condition cars!"</p><div class="rating">⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="review-card">
+                <div class="user-info"><img src="https://i.pravatar.cc/50?img=2" class="avatar"><p>Bob Smith</p></div>
+                <p>"Smooth and quick process, great cars!"</p><div class="rating">⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="review-card">
+                <div class="user-info"><img src="https://i.pravatar.cc/50?img=3" class="avatar"><p>Catherine Lee</p></div>
+                <p>"Easy booking, affordable and reliable."</p><div class="rating">⭐⭐⭐⭐</div>
+            </div>
+            <div class="review-card">
+                <div class="user-info"><img src="https://i.pravatar.cc/50?img=4" class="avatar"><p>David Brown</p></div>
+                <p>"Excellent experience, clean cars."</p><div class="rating">⭐⭐⭐⭐⭐</div>
+            </div>
+            <!-- Duplicate for infinite loop -->
+            <div class="review-card">
+                <div class="user-info"><img src="https://i.pravatar.cc/50?img=1" class="avatar"><p>Alice Johnson</p></div>
+                <p>"Amazing service! Perfect condition cars!"</p><div class="rating">⭐⭐⭐⭐⭐</div>
+            </div>
         </div>
     </div>
 </section>
 
-<section>
-    <h2 style="text-align:center;">Popular Cars</h2>
-    <div class="popular-cars">
-        <div class="car-card">
-            <img src="/images/car5.jpg" alt="Car 5">
-            <p>BMW X5</p>
-        </div>
-        <div class="car-card">
-            <img src="/images/car6.jpg" alt="Car 6">
-            <p>Audi Q7</p>
-        </div>
-        <div class="car-card">
-            <img src="/images/car7.jpg" alt="Car 7">
-            <p>Mercedes GLA</p>
-        </div>
-        <div class="car-card">
-            <img src="/images/car8.jpg" alt="Car 8">
-            <p>Tesla Model 3</p>
-        </div>
+<!-- Popular Cars Section -->
+<section class="popular-cars">
+    <h2>Popular Cars</h2>
+    <div class="car-gallery">
+        <div class="car-item"><img src="/images/car5.jpg" alt="Car 5"><p>Audi A6</p></div>
+        <div class="car-item"><img src="/images/car6.jpg" alt="Car 6"><p>BMW X5</p></div>
+        <div class="car-item"><img src="/images/car7.jpg" alt="Car 7"><p>Mercedes C-Class</p></div>
+        <div class="car-item"><img src="/images/car8.jpg" alt="Car 8"><p>Honda City</p></div>
     </div>
 </section>
 
-<footer>
-    <div class="columns">
-        <div class="column">
-            <h3>Quick Links</h3>
-            <a th:href="@{/cars}">View Cars</a>
-            <a th:href="@{/bookCar}">Book a Car</a>
-            <a th:href="@{/myBookings}">My Bookings</a>
-        </div>
-        <div class="column">
-            <h3>Contact Info</h3>
-            <p>Email: info@jamrentals.com</p>
-            <p>Phone: +91 98765 43210</p>
-            <p>Address: Tirunelveli, Tamil Nadu</p>
-        </div>
-        <div class="column">
-            <h3>Follow Us</h3>
-            <a href="#">Instagram</a>
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-        </div>
-    </div>
-    <p>© 2025 JAM Rental Cars | All Rights Reserved</p>
-</footer>
+<!-- Back to Top Button -->
+<div class="back-to-top-wrapper">
+    <button id="back-to-top">↑ Back to Top</button>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <p>📍 123 One Street, Bangalore, India</p>
+    <p>📞 +91 9500237951 | ✉️ info@jamcarrental.com</p>
+    <p>
+        <a href="#">About</a> |
+        <a href="#">Privacy</a> |
+        <a href="#">Terms</a>
+    </p>
+    <p>© 2025 JAM Car Rentals</p>
+</div>
+
+<script>
+    // Back to Top functionality
+    document.getElementById('back-to-top').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
 
 </body>
 </html>
