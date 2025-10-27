@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registration Form</title>
+    <link rel="stylesheet" th:href="@{/css/styleregister.css}">
+</head>
+<body>
+
+<!-- Falling leaves -->
+<div class="leaves">
+    <div class="set">
+        <div><img src="/images/leaf_01.png" alt="leaf"></div>
+        <div><img src="/images/leaf_02.png" alt="leaf"></div>
+        <div><img src="/images/leaf_03.png" alt="leaf"></div>
+        <div><img src="/images/leaf_04.png" alt="leaf"></div>
+        <div><img src="/images/leaf_01.png" alt="leaf"></div>
+        <div><img src="/images/leaf_02.png" alt="leaf"></div>
+        <div><img src="/images/leaf_03.png" alt="leaf"></div>
+        <div><img src="/images/leaf_04.png" alt="leaf"></div>
+    </div>
+</div>
+
+<!-- Registration Form -->
+<div class="form-container">
+    <h2>Registration Form</h2>
+
+    <form th:action="@{/register}" th:object="${userRequestDto}" method="post">
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{email}" placeholder="Enter your email"/>
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" th:field="*{password}" placeholder="Enter your password"/>
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span>
+        </div>
+
+
+        <div class="form-group">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="tel" id="phoneNumber" th:field="*{phoneNumber}" placeholder="Enter your phone number"/>
+            <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">Register</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

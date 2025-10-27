@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>My Bookings</title>
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .home-button {
+      display: block;
+      margin: 0 auto 30px auto;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+      text-align: center;
+      width: fit-content;
+    }
+    .home-button:hover {
+      background-color: #218838;
+    }
+    .booking-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      width: 70%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+    .modify { background-color: #007bff; }
+    .cancel { background-color: #dc3545; }
+    button:hover { opacity: 0.8; }
+  </style>
+</head>
+<body>
+
+<h1>My Bookings</h1>
+
+<!-- Home button -->
+<a href="/" class="home-button">🏠 Go to Home</a>
+
+<div th:if="${#lists.isEmpty(bookings)}" style="text-align:center;">
+  <p>No bookings found.</p>
+</div>
+
+<div th:each="booking : ${bookings}" class="booking-card">
+  <p><b>Car:</b> <span th:text="${booking.car != null ? booking.car.name : 'N/A'}"></span></p>
+  <p><b>Model:</b> <span th:text="${booking.car != null ? booking.car.model : 'N/A'}"></span></p>
+  <p><b>From:</b> <span th:text="${booking.fromDate}"></span></p>
+  <p><b>To:</b> <span th:text="${booking.toDate}"></span></p>
+  <p><b>Total Price:</b> ₹<span th:text="${booking.totalPrice}"></span></p>
+
+  <div class="buttons">
+    <a th:href="@{'/modifyBooking/' + ${booking.bookingId}}">
+      <button class="modify">Modify</button>
+    </a>
+
+    <form th:action="@{'/cancelBooking/' + ${booking.bookingId}}" method="post" style="display:inline;">
+      <button type="submit" class="cancel">Cancel</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

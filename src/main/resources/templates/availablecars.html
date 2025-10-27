@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Available Cars</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body { background-color: #f8f9fa; }
+
+    h2.page-title {
+        font-weight: 600;
+        margin: 1rem 0 1.5rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        transition: transform 0.18s ease;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .card:hover { transform: translateY(-3px); }
+
+    .hover-carousel {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+        background-color: #eee;
+        overflow: hidden;
+    }
+    .hover-carousel img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.45s ease-in-out;
+        display: block;
+    }
+
+    .card-body { padding: 1rem; flex: 1 1 auto; }
+    .btn-primary { width: 100%; }
+    .no-cars { text-align:center; color:#666; margin-top:2rem; }
+    .pagination { justify-content: center; margin-top: 1.25rem; }
+  </style>
+</head>
+<body>
+<div class="container mt-4 mb-5">
+  <h2 class="page-title">Available Cars</h2>
+
+  <!-- Filter Info Section -->
+  <div class="alert alert-info mb-4" role="alert" th:if="${selectedModel}">
+    <strong>Showing results for:</strong>
+    <span th:text="${selectedModel}"></span> |
+    Date: <span th:text="${pickupDate}"></span> |
+    Time: <span th:text="${pickupTime}"></span>
+  </div>
+
+  <div th:if="${#lists.isEmpty(cars)}" class="no-cars">
+    No available cars found for your selection.
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 g-4" th:if="${!#lists.isEmpty(cars)}">
+    <div class="col" th:each="car, iterStat : ${cars}">
+      <div class="card h-100">
+
+        <div class="hover-carousel" th:id="'hoverCarousel' + ${iterStat.index}"
+             th:attr="data-images=${car.imageUrl}">
+          <img class="carousel-img"
+               th:src="@{${#strings.arraySplit(car.imageUrl,',')[0]}}"
+               alt="Car Image">
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title mb-2" th:text="${car.name} + ' ' + ${car.model}">Car Name Model</h5>
+          <p class="mb-1">Price: ₹<span th:text="${car.price}">0</span> per day</p>
+          <p class="mb-1">Seats: <span th:text="${car.seatingCapacity}">0</span></p>
+          <p class="mb-1">Luggage: <span th:text="${car.luggageCapacity}">0</span></p>
+          <p class="mb-1">AC: <span th:text="${car.acOrNonAc}">AC</span></p>
+          <p class="mb-3">Free Cancellation: <span th:text="${car.isFreeCancellation}">No</span></p>
+
+          <a th:href="@{/bookcar/{id}(id=${car.carId})}" class="btn btn-primary w-100">Book Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <nav th:if="${totalPages > 1}">
+    <ul class="pagination">
+      <li class="page-item" th:classappend="${currentPage == 1} ? ' disabled'">
+        <a class="page-link" th:href="@{/availablecars(page=${currentPage - 1})}">Previous</a>
+      </li>
+
+      <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+          th:classappend="${i == currentPage} ? ' active'">
+        <a class="page-link" th:href="@{/availablecars(page=${i})}" th:text="${i}">1</a>
+      </li>
+
+      <li class="page-item" th:classappend="${currentPage == totalPages} ? ' disabled'">
+        <a class="page-link" th:href="@{/availablecars(page=${currentPage + 1})}">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.hover-carousel').forEach(carousel => {
+          const data = carousel.getAttribute('data-images') || '';
+          const images = data.split(',').map(s => s.trim()).filter(s => s.length > 0);
+          if (images.length === 0) return;
+
+          const imgEl = carousel.querySelector('img');
+          let idx = 0;
+          let intervalId = null;
+
+          carousel.addEventListener('mouseenter', () => {
+              if (images.length <= 1) return;
+              idx = 1;
+              imgEl.src = images[idx];
+              intervalId = setInterval(() => {
+                  idx = (idx + 1) % images.length;
+                  imgEl.src = images[idx];
+              }, 900);
+          });
+
+          carousel.addEventListener('mouseleave', () => {
+              if (intervalId) {
+                  clearInterval(intervalId);
+                  intervalId = null;
+              }
+              imgEl.src = images[0];
+          });
+      });
+  });
+</script>
+</body>
+</html>

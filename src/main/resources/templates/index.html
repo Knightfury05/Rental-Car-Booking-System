@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAM Rental Cars</title>
+    <style>
+        body {
+          margin: 0;
+          font-family: 'Poppins', sans-serif;
+          background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/bg1.jpg') no-repeat center center/cover;
+          background-attachment: fixed;
+          color: #fff;
+          overflow-x: hidden;
+        }
+
+        header {
+          background: rgba(0, 0, 0, 0.7);
+          box-shadow: 0 2px 10px rgba(255, 204, 0, 0.3);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 15px 60px;
+          position: fixed;
+          top: 0;
+          width: 100%;
+          z-index: 1000;
+          backdrop-filter: blur(6px);
+        }
+
+        header img {
+          height: 55px;
+          border-radius: 10px;
+        }
+
+        nav ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          gap: 25px;
+          align-items: center;
+        }
+
+        nav ul li a {
+          color: white;
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 17px;
+          transition: color 0.3s, transform 0.2s;
+        }
+
+        nav ul li a:hover {
+          color: #ffcc00;
+          transform: scale(1.1);
+        }
+
+        .hero {
+          text-align: center;
+          margin-top: 140px;
+          padding: 120px 20px;
+          background: rgba(0, 0, 0, 0.45);
+          border-radius: 20px;
+          width: 75%;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .hero h1 {
+          font-size: 44px;
+          margin-bottom: 5px;
+          letter-spacing: 2px;
+          color: #ffcc00;
+        }
+
+        .hero h2 {
+          font-size: 20px;
+          font-weight: 300;
+          margin-bottom: 30px;
+          color: #eee;
+        }
+
+        .hero .buttons {
+          display: flex;
+          justify-content: center;
+          gap: 25px;
+        }
+
+        .hero button {
+          padding: 14px 32px;
+          border: none;
+          border-radius: 30px;
+          background-color: #ffcc00;
+          color: black;
+          font-weight: bold;
+          font-size: 16px;
+          cursor: pointer;
+          transition: transform 0.3s, background 0.3s;
+        }
+
+        .hero button:hover {
+          transform: translateY(-3px);
+          background: #ffdb4d;
+        }
+
+        section {
+          background: rgba(0, 0, 0, 0.55);
+          padding: 60px 20px;
+          margin-top: 80px;
+          border-radius: 15px;
+          width: 85%;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .reviews {
+          display: flex;
+          overflow: hidden;
+          gap: 30px;
+          animation: scrollReviews 20s linear infinite;
+        }
+
+        .review {
+          background: rgba(255, 255, 255, 0.1);
+          padding: 25px;
+          border-radius: 12px;
+          min-width: 300px;
+          flex: 0 0 auto;
+          color: white;
+        }
+
+        .review h3 {
+          margin: 10px 0 5px;
+          color: #ffcc00;
+        }
+
+        .stars {
+          color: #ffcc00;
+          font-size: 20px;
+        }
+
+        @keyframes scrollReviews {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+
+        .popular-cars {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 25px;
+          margin-top: 50px;
+        }
+
+        .car-card {
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 15px;
+          overflow: hidden;
+          text-align: center;
+          padding-bottom: 10px;
+        }
+
+        .car-card img {
+          width: 100%;
+          height: 160px;
+          object-fit: cover;
+        }
+
+        .car-card p {
+          margin: 10px 0;
+          font-weight: bold;
+          color: #ffcc00;
+        }
+
+        footer {
+          background: rgba(0, 0, 0, 0.85);
+          padding: 40px 60px;
+          color: white;
+          text-align: center;
+          margin-top: 60px;
+          border-top: 2px solid #ffcc00;
+        }
+
+        footer .columns {
+          display: flex;
+          justify-content: space-around;
+          flex-wrap: wrap;
+          margin-bottom: 20px;
+        }
+
+        footer .column h3 {
+          color: #ffcc00;
+          margin-bottom: 15px;
+        }
+
+        footer a {
+          color: #fff;
+          text-decoration: none;
+          display: block;
+          margin-bottom: 5px;
+        }
+
+        footer a:hover {
+          color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="/images/logo.jpg" alt="Logo">
+    <nav>
+        <ul>
+            <li><a th:href="@{/cars}">View Cars</a></li>
+            <li><a th:href="@{/myBookings}">My Bookings</a></li>
+            <li><a th:href="@{/contact}">Contact Us</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="hero">
+    <h1>JAM Rental Cars</h1>
+    <h2>Find your dreams with us</h2>
+    <div class="buttons">
+        <a th:href="@{/bookCar}"><button>Book Now</button></a>
+        <a th:href="@{/cars}"><button>View Cars</button></a>
+    </div>
+</div>
+
+<section>
+    <h2 style="text-align:center;">Customer Reviews</h2>
+    <div class="reviews">
+        <div class="review">
+            <p>"Great service and clean cars! Highly recommend."</p>
+            <h3>- Rahul</h3>
+            <div class="stars">★★★★★</div>
+        </div>
+        <div class="review">
+            <p>"Smooth booking process and timely delivery."</p>
+            <h3>- Priya</h3>
+            <div class="stars">★★★★☆</div>
+        </div>
+        <div class="review">
+            <p>"Affordable and professional! Will rent again."</p>
+            <h3>- Kishore</h3>
+            <div class="stars">★★★★★</div>
+        </div>
+        <div class="review">
+            <p>"Car was in excellent condition, great experience."</p>
+            <h3>- Sneha</h3>
+            <div class="stars">★★★★★</div>
+        </div>
+        <!-- Duplicate for continuous scroll -->
+        <div class="review">
+            <p>"Great service and clean cars! Highly recommend."</p>
+            <h3>- Rahul</h3>
+            <div class="stars">★★★★★</div>
+        </div>
+        <div class="review">
+            <p>"Smooth booking process and timely delivery."</p>
+            <h3>- Priya</h3>
+            <div class="stars">★★★★☆</div>
+        </div>
+        <div class="review">
+            <p>"Affordable and professional! Will rent again."</p>
+            <h3>- Kishore</h3>
+            <div class="stars">★★★★★</div>
+        </div>
+        <div class="review">
+            <p>"Car was in excellent condition, great experience."</p>
+            <h3>- Sneha</h3>
+            <div class="stars">★★★★★</div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2 style="text-align:center;">Popular Cars</h2>
+    <div class="popular-cars">
+        <div class="car-card">
+            <img src="/images/car5.jpg" alt="Car 5">
+            <p>BMW X5</p>
+        </div>
+        <div class="car-card">
+            <img src="/images/car6.jpg" alt="Car 6">
+            <p>Audi Q7</p>
+        </div>
+        <div class="car-card">
+            <img src="/images/car7.jpg" alt="Car 7">
+            <p>Mercedes GLA</p>
+        </div>
+        <div class="car-card">
+            <img src="/images/car8.jpg" alt="Car 8">
+            <p>Tesla Model 3</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="columns">
+        <div class="column">
+            <h3>Quick Links</h3>
+            <a th:href="@{/cars}">View Cars</a>
+            <a th:href="@{/bookCar}">Book a Car</a>
+            <a th:href="@{/myBookings}">My Bookings</a>
+        </div>
+        <div class="column">
+            <h3>Contact Info</h3>
+            <p>Email: info@jamrentals.com</p>
+            <p>Phone: +91 98765 43210</p>
+            <p>Address: Tirunelveli, Tamil Nadu</p>
+        </div>
+        <div class="column">
+            <h3>Follow Us</h3>
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+        </div>
+    </div>
+    <p>© 2025 JAM Rental Cars | All Rights Reserved</p>
+</footer>
+
+</body>
+</html>

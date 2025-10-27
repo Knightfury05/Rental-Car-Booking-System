@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us</title>
+    <link rel="stylesheet" th:href="@{/css/contactUs.css}">
+</head>
+<body>
+<!-- Header -->
+<div class="header">
+    <img src="/images/logo.png" alt="Logo">
+    <div class="nav-buttons">
+        <button onclick="window.location.href='/'">Home</button>
+        <button onclick="window.location.href='/cars'">Cars</button>
+        <button onclick="window.location.href='/contact'">Contact</button>
+    </div>
+</div>
+
+<!-- Contact Form -->
+<div class="form-container">
+    <div class="form">
+        <span class="heading">Get in touch</span>
+        <input placeholder="Name" type="text" class="input">
+        <input placeholder="Email" id="mail" type="email" class="input">
+        <textarea placeholder="Say Hello" rows="10" cols="30" id="message" name="message" class="textarea"></textarea>
+        <div class="button-container">
+            <div class="send-button">Send</div>
+            <div class="reset-button-container">
+                <div id="reset-btn" class="reset-button" onclick="resetForm()">Reset</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    © 2025 JAM Car Rentals | Designed by You
+</div>
+
+<script>
+    function resetForm() {
+        document.querySelector('.form').reset?.();
+        document.getElementById('mail').value = '';
+        document.getElementById('message').value = '';
+        document.querySelector('.form .input').value = '';
+    }
+</script>
+
+</body>
+</html>

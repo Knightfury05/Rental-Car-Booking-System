@@ -1,0 +1,154 @@
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0b1e2d;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #001925;
+            color: white;
+        }
+
+        .header img {
+            height: 50px;
+        }
+
+        .header .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header .nav-buttons button {
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            background-color: #ff7a01;
+            color: #001925;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .header .nav-buttons button:hover {
+            background-color: #001925;
+            color: #ff7a01;
+            border: 1px solid #ff7a01;
+        }
+
+        /* Contact Form Container */
+        .form-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background-color: #001925;
+            padding: 30px;
+            border-left: 5px solid #ff7a01;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        .heading {
+            display: block;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-container .form .input,
+        .form-container .form .textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            border: none;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+            border-left: 1px solid transparent;
+        }
+
+        .form-container .form .input {
+            color: #87a4b6;
+            background-color: #002733;
+        }
+
+        .form-container .form .input:focus {
+            border-left: 5px solid #ff7a01;
+        }
+
+        .form-container .form .textarea {
+            background-color: #013747;
+            color: #ff7a01;
+            resize: none;
+            max-height: 150px;
+        }
+
+        .form-container .form .textarea:focus {
+            border-left: 5px solid #ff7a01;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .send-button {
+            flex-basis: 70%;
+            background: #ff7a01;
+            padding: 10px;
+            color: #001925;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .send-button:hover {
+            background: transparent;
+            border: 1px solid #ff7a01;
+            color: #ff7a01;
+        }
+
+        .reset-button-container {
+            flex-basis: 30%;
+        }
+
+        .reset-button {
+            text-align: center;
+            padding: 10px;
+            color: #ff7a01;
+            font-weight: bold;
+            background: #001925;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .reset-button:hover {
+            background: #ff7a01;
+            color: #001925;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #001925;
+            color: #ccc;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .button-container {
+                flex-direction: column;
+            }
+            .send-button, .reset-button {
+                flex-basis: 100%;
+            }
+        }

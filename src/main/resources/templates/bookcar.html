@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Car</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Poppins', sans-serif; }
+        .booking-card {
+          max-width: 700px;
+          margin: 40px auto;
+          background: #fff;
+          border-radius: 12px;
+          padding: 2rem;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        .summary-box {
+          background-color: #eef7ff;
+          border-radius: 10px;
+          padding: 1rem;
+          margin-top: 1rem;
+          display: none;
+        }
+        .summary-box.show { display: block; animation: fadeIn 0.4s ease-in; }
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="booking-card">
+        <h3 class="text-center mb-4 text-primary">Book Your Car</h3>
+
+        <!-- Car details (auto-filled) -->
+        <div>
+            <h5 th:text="${car.name} + ' ' + ${car.model}"></h5>
+            <p>Price per day: ₹<span th:text="${car.price}"></span></p>
+            <p>Seats: <span th:text="${car.seatingCapacity}"></span></p>
+            <p>Luggage: <span th:text="${car.luggageCapacity}"></span></p>
+            <p>AC Type: <span th:text="${car.acOrNonAc}"></span></p>
+            <p>Free Cancellation: <span th:text="${car.isFreeCancellation}"></span></p>
+        </div>
+
+        <hr>
+
+        <!-- Booking Form -->
+        <form id="bookingForm" th:action="@{/confirmBooking}" method="post">
+            <input type="hidden" name="carId" th:value="${car.carId}" />
+
+            <div class="mb-3">
+                <label class="form-label">From Date</label>
+                <input type="date" id="fromDate" name="fromDate" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">To Date</label>
+                <input type="date" id="toDate" name="toDate" class="form-control" required>
+            </div>
+
+            <div id="summaryBox" class="summary-box">
+                <p><strong>Total Days:</strong> <span id="totalDays">0</span></p>
+                <p><strong>Total Price:</strong> ₹<span id="totalPrice">0</span></p>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-3">Confirm Booking</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const price = parseFloat(document.querySelector('[th\\:text="${car.price}"]')?.textContent || 0);
+    const fromInput = document.getElementById('fromDate');
+    const toInput = document.getElementById('toDate');
+    const totalDaysEl = document.getElementById('totalDays');
+    const totalPriceEl = document.getElementById('totalPrice');
+    const summaryBox = document.getElementById('summaryBox');
+
+    function calc() {
+      const from = new Date(fromInput.value);
+      const to = new Date(toInput.value);
+      if (from && to && to >= from) {
+        const days = Math.ceil((to - from) / (1000*60*60*24)) + 1;
+        totalDaysEl.textContent = days;
+        totalPriceEl.textContent = (days * price).toLocaleString('en-IN');
+        summaryBox.classList.add("show");
+      } else {
+        summaryBox.classList.remove("show");
+      }
+    }
+
+    fromInput.addEventListener('change', calc);
+    toInput.addEventListener('change', calc);
+</script>
+</body>
+</html>

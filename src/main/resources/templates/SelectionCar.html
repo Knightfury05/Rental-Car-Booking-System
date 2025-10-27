@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Your Car</title>
+    <style>
+        body, html {
+             margin: 0;
+             padding: 0;
+             height: 100%;
+             font-family: Arial, sans-serif;
+
+             /* Background stays fixed at bottom, no repeat */
+             background-color: #f8f8f8;
+             background-image: url('images/bookbg.jpg');
+             background-repeat: no-repeat;
+             background-position: bottom center;
+             background-size: 80% auto;  /* stretch across width, keep aspect ratio */
+
+             display: flex;
+             align-items: flex-start;  /* form moves up */
+             justify-content: center;
+             padding-top: 60px;  /* adjust to raise form */
+ }
+
+
+         .booking-form {
+             background: white;
+             padding: 30px 40px 20px;
+             border-radius: 10px;
+             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+             text-align: center;
+             width: 350px;
+
+             position: absolute; /* float the form */
+             top: 10%;  /* adjust vertical position (lower = closer to bottom) */
+             left: 50%;
+             transform: translateX(-50%);
+         }
+
+
+                 .booking-form h2 {
+                     margin-bottom: 20px;
+                     color: #333;
+                 }
+
+                 .booking-form select,
+                 .booking-form input {
+                     width: 100%;
+                     padding: 10px;
+                     margin: 10px 0;
+                     border: 1px solid #ccc;
+                     border-radius: 5px;
+                     font-size: 16px;
+                 }
+
+                 .submit-btn {
+                     background-color: red;
+                     color: white;
+                     padding: 12px 20px;
+                     border: none;
+                     border-radius: 5px;
+                     cursor: pointer;
+                     font-size: 16px;
+                     transition: background-color 0.3s ease;
+                     width: 100%;
+                 }
+
+                 .submit-btn:hover {
+                     background-color: darkred;
+                 }
+
+                 .error {
+                     color: red;
+                     text-align: left;
+                 }
+    </style>
+</head>
+<body>
+
+<div class="booking-form">
+    <h2>Book Your Car</h2>
+
+    <form th:action="@{/SelectionCar}" th:object="${bookingRequestDto}" method="post">
+        <select name="carModelType" required>
+            <option value="">Select Car Type</option>
+            <option value="Sedan">Sedan</option>
+            <option value="Hatchback">Hatchback</option>
+            <option value="SUV">SUV</option>
+            <option value="Convertible">Convertible</option>
+        </select>
+
+        <div class="error" th:if="${#fields.hasErrors('carName')}" th:errors="*{carName}"></div>
+
+        <input type="date" th:field="*{pickupDate}" />
+        <div class="error" th:if="${#fields.hasErrors('pickupDate')}" th:errors="*{pickupDate}"></div> <!--fields-> tell the result of the binding element whose results are present inside bindingResult object.
+        .The th:errors attribute is used to display validation errors for a specific . It retrieves error messages from the binding result associated with the form object.-->
+
+        <input type="time" th:field="*{pickupTime}" />
+        <div class="error" th:if="${#fields.hasErrors('pickupTime')}" th:errors="*{pickupTime}"></div>
+
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>
+
+
+

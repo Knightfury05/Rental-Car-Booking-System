@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${isUpdate} ? 'Modify Booking' : 'Book Car'"></title>
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      width: 50%;
+      margin: 30px auto;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<h1 th:text="${isUpdate} ? 'Modify Booking' : 'Book Car'"></h1>
+<h3 style="text-align: center; color: #d9534f;"><strong>** You can modify only the dates **</strong></h3>
+<form th:action="${isUpdate} ? @{/updateBooking} : @{/bookingSuccess}"
+      th:object="${booking}" method="post">
+
+  <!-- Hidden IDs -->
+  <input type="hidden" th:field="*{bookingId}" />
+  <input type="hidden" th:field="*{car.carId}" />
+
+  <label>Car Name</label>
+  <input type="text" th:value="${booking.car != null ? booking.car.name : 'N/A'}" readonly />
+
+  <label>Model</label>
+  <input type="text" th:value="${booking.car != null ? booking.car.model : 'N/A'}" readonly />
+
+  <label>From Date</label>
+  <!-- ✅ Revert back to th:field (so Spring binds it) but ensure value formats correctly -->
+  <input type="date" th:field="*{fromDate}"
+         th:value="${booking.fromDate != null ? #temporals.format(booking.fromDate, 'yyyy-MM-dd') : ''}"
+         id="fromDate" required />
+
+  <label>To Date</label>
+  <input type="date" th:field="*{toDate}"
+         th:value="${booking.toDate != null ? #temporals.format(booking.toDate, 'yyyy-MM-dd') : ''}"
+         id="toDate" required />
+
+  <label>Total Days</label>
+  <input type="number" th:field="*{totalDays}" id="totalDays" readonly />
+
+  <label>Total Price (₹)</label>
+  <input type="number" th:field="*{totalPrice}" id="totalPrice" readonly />
+
+  <input type="hidden" id="pricePerDay"
+         th:value="${booking.car != null ? booking.car.price : 0}" />
+
+  <button type="submit" th:text="${isUpdate} ? 'Confirm Update' : 'Confirm Booking'"></button>
+</form>
+
+<script>
+  // ✅ Auto-update totalDays & totalPrice when dates change
+  document.addEventListener("DOMContentLoaded", function() {
+    const fromDate = document.getElementById("fromDate");
+    const toDate = document.getElementById("toDate");
+    const totalDays = document.getElementById("totalDays");
+    const totalPrice = document.getElementById("totalPrice");
+    const pricePerDay = parseFloat(document.getElementById("pricePerDay").value);
+
+    function calculate() {
+      const start = new Date(fromDate.value);
+      const end = new Date(toDate.value);
+      if (fromDate.value && toDate.value && end >= start) {
+        const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) || 1;
+        totalDays.value = diffDays;
+        totalPrice.value = diffDays * pricePerDay;
+      }
+    }
+
+    fromDate.addEventListener("change", calculate);
+    toDate.addEventListener("change", calculate);
+
+    // ✅ Run on page load to auto-calc when modifying
+    calculate();
+  });
+</script>
+
+</body>
+</html>
